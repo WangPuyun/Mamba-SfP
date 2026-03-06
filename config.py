@@ -19,7 +19,7 @@ def init_distributed(local_rank, nprocs, url='tcp://localhost:25464'):
     Initialize the distributed training environment.
     """
     dist.init_process_group(
-        backend='gloo',  # Use NCCL backend for GPU communication
+        backend='nccl',  # Use NCCL backend for GPU communication
         init_method=url,  # URL specifying the initialization method (IP + port)
         world_size=nprocs,  # Total number of processes
         rank=local_rank  # Rank of the current process
@@ -81,14 +81,14 @@ def create_dataloaders(args):
     """
     # Training set
     train_set = MyDataset(
-        csv_file='Underwater Dataset/temp_list_withoutcleanwater.csv',
+        csv_file='Underwater Dataset/train_list_withoutcleanwater.csv',
         root_dir='Underwater Dataset/Baseline_Data',
         transform=RandomCrop()  # RandomCrop for data augmentation
     )
 
     # Validation set
     val_set = MyDataset(
-        csv_file='Underwater Dataset/temp_list_withoutcleanwater.csv',
+        csv_file='Underwater Dataset/val_list_withoutcleanwater.csv',
         root_dir='Underwater Dataset/Baseline_Data',
         transform=False  
     )

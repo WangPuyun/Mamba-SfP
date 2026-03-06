@@ -1,5 +1,6 @@
 import argparse
 import os
+os.environ['CUDA_VISIBLE_DEVICES'] = '2,4,5,6'
 import torch.multiprocessing as mp
 import config as config
 import pandas as pd
@@ -10,13 +11,13 @@ import torch.nn as nn
 from tqdm import tqdm
 from LossFunction import Loss_Function
 import glob
-os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+
 
 parser = argparse.ArgumentParser(description='PyTorch Network Training')
 parser.add_argument("--model_name", type=str, default=None, help="Load pre-trained model to continue training. Default=None (train from scratch), set to '/**.pth' to resume training")
 parser.add_argument('--lr', type=float, default=0.001, help='Learning rate')
-parser.add_argument("--train_batch_size", type=int, default=2, help="Batch size for distributed training")
-parser.add_argument("--val_batch_size", type=int, default=1, help="Batch size for distributed validation, it should be equal to the number of GPUs")
+parser.add_argument("--train_batch_size", type=int, default=24, help="Batch size for distributed training")
+parser.add_argument("--val_batch_size", type=int, default=4, help="Batch size for distributed validation, it should be equal to the number of GPUs")
 parser.add_argument('--event_dir', default="./runs", help='Directory for TensorBoard event files')
 parser.add_argument("cos", action='store_true', help="use cos decay learning rate")
 parser.add_argument("--epochs", type=int, default=1000)
