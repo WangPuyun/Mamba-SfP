@@ -9,8 +9,8 @@ if [ -z "$1" ]; then
   exit 1
 fi
 
-# Ensure we're on the main branch
-git checkout main
+# Ensure we're on the master branch
+git checkout master
 
 # Automatically read and update version number
 VERSION_FILE="version.txt"
@@ -33,6 +33,6 @@ COMMIT_MSG="$VERSION: $1"
 git commit -m "$COMMIT_MSG"
 
 # Push to remote repository
-git push origin main
+git push origin master
 
 echo "✅ [$VERSION] Successfully committed and pushed:$1"
