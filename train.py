@@ -10,7 +10,7 @@ import torch.nn as nn
 from tqdm import tqdm
 from LossFunction import Loss_Function
 import glob
-os.environ['CUDA_VISIBLE_DEVICES'] = '3,5,6,7'
+os.environ['CUDA_VISIBLE_DEVICES'] = '0,1,2,3'
 
 parser = argparse.ArgumentParser(description='PyTorch Network Training')
 parser.add_argument("--model_name", type=str, default=None, help="Load pre-trained model to continue training. Default=None (train from scratch), set to '/**.pth' to resume training")
@@ -21,7 +21,7 @@ parser.add_argument('--event_dir', default="./runs", help='Directory for TensorB
 parser.add_argument("cos", action='store_true', help="use cos decay learning rate")
 parser.add_argument("--epochs", type=int, default=1000)
 parser.add_argument('--warmup_epochs', type=int, default=50, help='Number of warmup epochs for learning rate')
-parser.add_argument('--checkpoints_dir', default="./pt/UD_SfPNet/", help='Path to model checkpoint files (for resuming training)')
+parser.add_argument('--checkpoints_dir', default="./pt/Mamba/", help='Path to model checkpoint files (for resuming training)')
 args = parser.parse_args()
 
 train_loss_list = []  # loss_list maintained only by main process
@@ -83,7 +83,7 @@ def main_worker(local_rank, nprocs,args):
             lr_list.append(current_lr)
             if val_loss_list[-1] < min_val_loss:
                 min_val_loss = val_loss_list[-1]
-                best_model_path = './pt/UD_SfPNet_best'
+                best_model_path = './pt/Mamba_best'
                 # Find all .pth files
                 pth_files = glob.glob(os.path.join(best_model_path, '*.pth'))
                 # Delete file
