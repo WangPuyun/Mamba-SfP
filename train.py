@@ -1,6 +1,6 @@
 import argparse
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = '2,4,5,6'
+os.environ['CUDA_VISIBLE_DEVICES'] = '0,4,5,6'
 import torch.multiprocessing as mp
 import config as config
 import pandas as pd

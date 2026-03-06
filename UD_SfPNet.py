@@ -2,6 +2,7 @@ import math
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from torch.nn.functional import normalize
 
 
 class ConvBNAct(nn.Module):
@@ -285,6 +286,7 @@ class FPNUNetDecoder(nn.Module):
 
         out = self.final_up(d1)
         out = self.pred(out)
+        out = normalize(out, p=2, dim=1)
         if out.shape[-2:] != out_size:
             out = F.interpolate(out, size=out_size, mode="bilinear", align_corners=False)
         return out
