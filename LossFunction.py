@@ -20,24 +20,7 @@ class Loss_Function(nn.Module):
         self.hist_weight = hist_weight
         self.normal_weight = normal_weight
 
-    def forward(self, predict, ground_truth, descattering_img, CleanWater, normal_hist, mask, train_loader):
-        # descattering loss
-        descattering_img = descattering_img * mask
-        CleanWater = CleanWater * mask
-        L_1 = self.l1_loss(descattering_img, CleanWater)
-        L_ssim = 1 - self.SSIM(descattering_img, CleanWater)
-        L_tv = total_variation_loss(descattering_img)
-        # The input of LPIPS must be a 3-channel image, where the Imean average intensity image is equivalently expanded to 3-channel
-        Imean_pred = four_pol_to_mean_intensity(descattering_img)
-        Imean_gt   = four_pol_to_mean_intensity(CleanWater)
-        # LPIPS requires an input range of [-1,1]
-        Imean_pred = Imean_pred * 2 - 1
-        Imean_gt   = Imean_gt * 2 - 1
-        L_lpips = self.LPIPS(Imean_pred, Imean_gt).mean()
-
-        # histogram loss
-        GT_hist = convert_images_to_color_hist_tensor(ground_truth, hist_size=64).cuda()
-        L_hist = self.l1_loss(normal_hist, GT_hist)
+    def forward(self, predict, ground_truth, mask, train_loader):
 
         # normal loss
         predict = predict * mask
@@ -52,7 +35,7 @@ class Loss_Function(nn.Module):
         L_normal = loss_cosine / M
 
         # total loss
-        total_loss = self.l1_weight * L_1 + self.ssim_weight * L_ssim + self.tv_weight * L_tv + self.lpips_weight * L_lpips + self.hist_weight * L_hist + self.normal_weight * L_normal
+        total_loss = self.normal_weight * L_normal
         # print("L_descattering loss: ", self.descattering_weight * L_descattering.item())
         # print("L_ssim loss:", self.ssim_weight * L_ssim.item())
         # print("L_tv loss:", self.tv_weight * L_tv.item())

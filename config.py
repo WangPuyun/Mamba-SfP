@@ -66,8 +66,6 @@ def wrap_model_distributed(model, local_rank):
     Convert BatchNorm layers to SyncBatchNorm and wrap the model with DistributedDataParallel.
     """
 
-    model.Normal_Prediction_Net.pce.cma_1.conv[0].weight.requires_grad = False
-    model.Normal_Prediction_Net.pce.cma_1.conv[0].bias.requires_grad = False
 
     # Convert BatchNorm layers to SyncBatchNorm
     model = nn.SyncBatchNorm.convert_sync_batchnorm(model)
@@ -83,14 +81,14 @@ def create_dataloaders(args):
     """
     # Training set
     train_set = MyDataset(
-        csv_file='Underwater Dataset/train_list_withoutcleanwater.csv',
+        csv_file='Underwater Dataset/temp_list_withoutcleanwater.csv',
         root_dir='Underwater Dataset/Baseline_Data',
         transform=RandomCrop()  # RandomCrop for data augmentation
     )
 
     # Validation set
     val_set = MyDataset(
-        csv_file='Underwater Dataset/val_list_withoutcleanwater.csv',
+        csv_file='Underwater Dataset/temp_list_withoutcleanwater.csv',
         root_dir='Underwater Dataset/Baseline_Data',
         transform=False  
     )
@@ -188,9 +186,9 @@ def train_sfp(train_loader, model, criterion, optimizer, epoch, writer, local_ra
         inputs.requires_grad_(True)
         inputs = inputs.cuda(local_rank, non_blocking=True)
 
-        dehaze_img, normal_hist, outputs = model(inputs)
+        outputs = model(inputs)
 
-        loss = criterion(outputs, ground_truths, dehaze_img, CleanWater, normal_hist, mask1, train_loader)
+        loss = criterion(outputs, ground_truths, mask1, train_loader)
 
         # Synchronization barrier: processes wait here until all peers reach this point, guaranteeing precise and sequential output.
         torch.distributed.barrier()  
@@ -246,7 +244,7 @@ def val_sfp(val_loader, model, writer, epoch, local_rank, args, criterion, val_l
 
                     patch = inputs[..., y:y+PATCH, x:x+PATCH]     # (1,C,256,256)
                     patch2 = image[..., y:y+PATCH, x:x+PATCH]
-                    dehaze_img, normal_hist, pred = model(patch)                      # (1,3,256,256)
+                    pred = model(patch)                      # (1,3,256,256)
                     pred = pred * window                         # Weighted
                     out_sum[..., y:y+PATCH, x:x+PATCH] += pred
                     w_sum[...,  y:y+PATCH, x:x+PATCH] += window
