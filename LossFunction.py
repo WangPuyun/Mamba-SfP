@@ -1,7 +1,6 @@
 import torch.nn as nn
 import torch
 import torch.nn.functional as F
-import lpips
 from torch.nn.functional import normalize
 import matplotlib.pyplot as plt
 from torchvision.utils import save_image
@@ -12,7 +11,6 @@ class Loss_Function(nn.Module):
         self.cosine_loss = nn.CosineSimilarity()
         self.l1_loss = nn.L1Loss()
         self.SSIM = SSIM()
-        self.LPIPS = lpips.LPIPS(net='vgg')
         self.l1_weight = l1_weight
         self.ssim_weight = ssim_weight
         self.tv_weight = tv_weight
