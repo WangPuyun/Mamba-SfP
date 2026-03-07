@@ -88,7 +88,7 @@ def create_dataloaders(args):
 
     # Validation set
     val_set = MyDataset(
-        csv_file='Underwater Dataset/val_list_withoutcleanwater.csv',
+        csv_file='Underwater Dataset/test_list_withoutcleanwater.csv',
         root_dir='Underwater Dataset/Baseline_Data',
         transform=False  
     )
@@ -105,7 +105,7 @@ def create_dataloaders(args):
     train_loader = DataLoader(
         train_set,
         batch_size=train_batch_size,
-        num_workers=6,
+        num_workers=4,
         pin_memory=True,
         sampler=train_sampler,
         drop_last=True
@@ -114,7 +114,7 @@ def create_dataloaders(args):
     val_loader = DataLoader(
         val_set,
         batch_size=val_batch_size,
-        num_workers=6,
+        num_workers=4,
         pin_memory=True,
         sampler=val_sampler,
         drop_last=True
