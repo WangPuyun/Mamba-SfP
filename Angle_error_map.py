@@ -17,7 +17,7 @@ from utils_window import PATCH, OVERLAP, STRIDE, hann2d
 import cv2
 import matplotlib.pyplot as plt
 # Distributed inference can be used, but it should be noted that the number of GPUs needs to be equal to the number of test_batch_size
-os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+os.environ['CUDA_VISIBLE_DEVICES'] = '1,5,6,7'
 
 def parse_args():
     parser = argparse.ArgumentParser(description='PyTorch Network Testing')
@@ -25,7 +25,7 @@ def parse_args():
     parser.add_argument("--model_name", type=str, default=None,
                     help="Path to the pre-trained model file to load, e.g., 'xxx.pth'")
     # Test batch size
-    parser.add_argument("--test_batch_size", type=int, default=1, help="Batch size for testing, it should be equal to the number of GPUs")
+    parser.add_argument("--test_batch_size", type=int, default=4, help="Batch size for testing, it should be equal to the number of GPUs")
     # Test data directory or other parameters (add as needed)
     parser.add_argument("--ckpt_path", type=str, default='./pt/UD_SfPNet/1000.pth', help="Path to the model weights file, e.g., './pt/100.pt'")
     parser.add_argument("--results_dir", type=str, default='./results_sfp', help="Directory to save prediction maps, e.g., './results_sfp_100'")
@@ -96,7 +96,7 @@ def main_worker(local_rank, nprocs, args):
                 for x in range(0, W - PATCH + 1, STRIDE):
                     patch = inputs[..., y:y+PATCH, x:x+PATCH]
                     patch2 = image[..., y:y+PATCH, x:x+PATCH]
-                    descattering_img, normal_hist, pred = model(patch)
+                    pred = model(patch)
                     pred = pred * window
                     out_sum[..., y:y+PATCH, x:x+PATCH] += pred
                     w_sum[...,  y:y+PATCH, x:x+PATCH] += window
