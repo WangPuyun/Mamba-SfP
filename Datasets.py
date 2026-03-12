@@ -42,21 +42,21 @@ class MyDataset(Dataset):
         mask = torch.as_tensor(img_gt['mask'], dtype=torch.float32)
 
         # UD_SfP Input_1
-        viewing_encoding = torch.as_tensor(get_coordinate(image), dtype=torch.float32).permute(2, 0, 1)
-        P = img_gt['P']
-        P = P[:, :, 1:4]# AoP & DoP
-        P1 = torch.as_tensor(P, dtype=torch.float32).permute(2, 0, 1)
-        IrawD = torch.as_tensor(img_gt['IrawD'], dtype=torch.float32).unsqueeze(0)
-        IrawS = torch.as_tensor(img_gt['IrawS'], dtype=torch.float32).unsqueeze(0)
-        input = torch.cat([image, P1, IrawD, IrawS, viewing_encoding], dim=0)
+        # viewing_encoding = torch.as_tensor(get_coordinate(image), dtype=torch.float32).permute(2, 0, 1)
+        # P = img_gt['P']
+        # P = P[:, :, 1:4]# AoP & DoP
+        # P1 = torch.as_tensor(P, dtype=torch.float32).permute(2, 0, 1)
+        # IrawD = torch.as_tensor(img_gt['IrawD'], dtype=torch.float32).unsqueeze(0)
+        # IrawS = torch.as_tensor(img_gt['IrawS'], dtype=torch.float32).unsqueeze(0)
+        # input = torch.cat([image, P1, IrawD, IrawS], dim=0)
 
         # UD_SfP Input_2
         # viewing_encoding = torch.as_tensor(get_coordinate(image), dtype=torch.float32).permute(2, 0, 1)
-        # N1 = torch.as_tensor(img_gt['Diffuse'], dtype=torch.float32).permute(2, 0, 1)
-        # N2 = torch.as_tensor(img_gt['Specular1'], dtype=torch.float32).permute(2, 0, 1)
-        # N3 = torch.as_tensor(img_gt['Specular2'], dtype=torch.float32).permute(2, 0, 1)
-        # N = torch.cat([N1, N2, N3], dim=0)
-        # input = torch.cat([image, N, viewing_encoding], dim=0)
+        N1 = torch.as_tensor(img_gt['Diffuse'], dtype=torch.float32).permute(2, 0, 1)
+        N2 = torch.as_tensor(img_gt['Specular1'], dtype=torch.float32).permute(2, 0, 1)
+        N3 = torch.as_tensor(img_gt['Specular2'], dtype=torch.float32).permute(2, 0, 1)
+        N = torch.cat([N1, N2, N3], dim=0)
+        input = torch.cat([image, N], dim=0)
 
         # Image Enhancement/Dehazing
         # enhanced_images = torch.as_tensor(img_gt['enhanced_images'], dtype=torch.float32).permute(2, 0, 1)

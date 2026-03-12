@@ -293,7 +293,7 @@ class FPNUNetDecoder(nn.Module):
 
 
 class NetWork(nn.Module):
-    def __init__(self, in_ch=12, out_ch=3):
+    def __init__(self, in_ch=13, out_ch=3):
         super().__init__()
         self.backbone = MambaVisionTinyBackbone(in_ch=in_ch)
         self.decoder = FPNUNetDecoder(out_ch=out_ch)
