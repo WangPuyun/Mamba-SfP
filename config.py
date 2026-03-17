@@ -88,7 +88,7 @@ def create_dataloaders(args):
 
     # Validation set
     val_set = MyDataset(
-        csv_file='Underwater Dataset/test_list_withoutcleanwater.csv',
+        csv_file='Underwater Dataset/val_list_withoutcleanwater.csv',
         root_dir='Underwater Dataset/Baseline_Data',
         transform=False  
     )

@@ -17,7 +17,7 @@ from utils_window import PATCH, OVERLAP, STRIDE, hann2d
 import cv2
 import matplotlib.pyplot as plt
 # Distributed inference can be used, but it should be noted that the number of GPUs needs to be equal to the number of test_batch_size
-os.environ['CUDA_VISIBLE_DEVICES'] = '1,5,6,7'
+os.environ['CUDA_VISIBLE_DEVICES'] = '4,5,6,7'
 
 def parse_args():
     parser = argparse.ArgumentParser(description='PyTorch Network Testing')

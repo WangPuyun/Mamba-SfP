@@ -48,15 +48,58 @@ class MyDataset(Dataset):
         # P1 = torch.as_tensor(P, dtype=torch.float32).permute(2, 0, 1)
         # IrawD = torch.as_tensor(img_gt['IrawD'], dtype=torch.float32).unsqueeze(0)
         # IrawS = torch.as_tensor(img_gt['IrawS'], dtype=torch.float32).unsqueeze(0)
-        # input = torch.cat([image, P1, IrawD, IrawS], dim=0)
+        # input = torch.cat([image, P1, IrawD, IrawS, viewing_encoding], dim=0)
 
         # UD_SfP Input_2
         # viewing_encoding = torch.as_tensor(get_coordinate(image), dtype=torch.float32).permute(2, 0, 1)
-        N1 = torch.as_tensor(img_gt['Diffuse'], dtype=torch.float32).permute(2, 0, 1)
-        N2 = torch.as_tensor(img_gt['Specular1'], dtype=torch.float32).permute(2, 0, 1)
-        N3 = torch.as_tensor(img_gt['Specular2'], dtype=torch.float32).permute(2, 0, 1)
-        N = torch.cat([N1, N2, N3], dim=0)
-        input = torch.cat([image, N], dim=0)
+        # N1 = torch.as_tensor(img_gt['Diffuse'], dtype=torch.float32).permute(2, 0, 1)
+        # N2 = torch.as_tensor(img_gt['Specular1'], dtype=torch.float32).permute(2, 0, 1)
+        # N3 = torch.as_tensor(img_gt['Specular2'], dtype=torch.float32).permute(2, 0, 1)
+        # N = torch.cat([N1, N2, N3], dim=0)
+        # input = torch.cat([image, N, viewing_encoding], dim=0)
+
+        # DeepSfP
+        # N1 = torch.as_tensor(img_gt['Diffuse'], dtype=torch.float32).permute(2, 0, 1)
+        # N2 = torch.as_tensor(img_gt['Specular1'], dtype=torch.float32).permute(2, 0, 1)
+        # N3 = torch.as_tensor(img_gt['Specular2'], dtype=torch.float32).permute(2, 0, 1)
+        # N = torch.cat([N1, N2, N3], dim=0)
+        # input = torch.cat([image, N], dim=0)
+
+        # AttentionU2Net
+        P = img_gt['P'] # Physical Prior, Channel 1 = average brightness image, Channel 2&3 = AoP, Channel 4 = DoP, Channel 5 = unpolarized light
+        P = P[:, :, 1:5]
+        P1 = torch.as_tensor(P, dtype=torch.float32).permute(2, 0, 1)
+        input = torch.cat([image, P1], dim=0)
+
+        # SfPW
+        # viewing_encoding = torch.as_tensor(get_coordinate(image), dtype=torch.float32).permute(2, 0, 1)
+        # P = img_gt['P'] # Physical Prior, Channel 1 = average brightness image, Channel 2&3 = AoP, Channel 4 = DoP, Channel 5 = unpolarized light
+        # P = P[:, :, 1:5]
+        # P1 = torch.as_tensor(P, dtype=torch.float32).permute(2, 0, 1)
+        # input = torch.cat([image, P1], dim=0)
+        # input = torch.cat([input, viewing_encoding], dim=0)
+
+        # TransSfP
+        # DoLP = torch.as_tensor(img_gt['DoLP'], dtype=torch.float32).unsqueeze(0)
+        # AoLP = torch.as_tensor(img_gt['AoLP'], dtype=torch.float32).unsqueeze(0)
+        # N1 = torch.as_tensor(img_gt['N1'], dtype=torch.float32).permute(2, 0, 1)
+        # N2 = torch.as_tensor(img_gt['N2'], dtype=torch.float32).permute(2, 0, 1)
+        # N3 = torch.as_tensor(img_gt['N3'], dtype=torch.float32).permute(2, 0, 1)
+        # N4 = torch.as_tensor(img_gt['N4'], dtype=torch.float32).permute(2, 0, 1)
+        # input = torch.cat([DoLP, AoLP, N1, N2, N3, N4], dim=0)
+
+        # CGA_Transformer 注意！！该算法需要使用新的数据集测试
+        # viewing_encoding = torch.as_tensor(get_coordinate(image), dtype=torch.float32).permute(2, 0, 1)
+        # P = img_gt['P'] # Physical Prior, Channel 1 = average brightness image, Channel 2&3 = AoP, Channel 4 = DoP, Channel 5 = unpolarized light
+        # I_un = P[:, :, 4:5]
+        # I_un = torch.as_tensor(I_un, dtype=torch.float32).permute(2, 0, 1)
+        # P = P[:, :, 1:5] # I_un, DoP, AoP
+        # P1 = torch.as_tensor(P, dtype=torch.float32).permute(2, 0, 1)
+        # N1 = torch.as_tensor(img_gt['Diffuse'], dtype=torch.float32).permute(2, 0, 1)
+        # N2 = torch.as_tensor(img_gt['Specular1'], dtype=torch.float32).permute(2, 0, 1)
+        # N3 = torch.as_tensor(img_gt['Specular2'], dtype=torch.float32).permute(2, 0, 1)
+        # H = torch.as_tensor(img_gt['SpecularConfidence'], dtype=torch.float32).unsqueeze(0)
+        # input = torch.cat([image, viewing_encoding, P1, I_un, N1, N2, N3, H], dim=0)
 
         # Image Enhancement/Dehazing
         # enhanced_images = torch.as_tensor(img_gt['enhanced_images'], dtype=torch.float32).permute(2, 0, 1)
