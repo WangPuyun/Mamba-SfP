@@ -500,7 +500,7 @@ class NetWork(nn.Module):
 
     def __init__(
         self,
-        in_ch=8,
+        in_ch=12,
         out_ch=3,
         variant="baseline",
         dims=(80, 160, 320, 640),

@@ -42,13 +42,13 @@ class MyDataset(Dataset):
         mask = torch.as_tensor(img_gt['mask'], dtype=torch.float32)
 
         # UD_SfP Input_1
-        # viewing_encoding = torch.as_tensor(get_coordinate(image), dtype=torch.float32).permute(2, 0, 1)
-        # P = img_gt['P']
-        # P = P[:, :, 1:4]# AoP & DoP
-        # P1 = torch.as_tensor(P, dtype=torch.float32).permute(2, 0, 1)
-        # IrawD = torch.as_tensor(img_gt['IrawD'], dtype=torch.float32).unsqueeze(0)
-        # IrawS = torch.as_tensor(img_gt['IrawS'], dtype=torch.float32).unsqueeze(0)
-        # input = torch.cat([image, P1, IrawD, IrawS, viewing_encoding], dim=0)
+        viewing_encoding = torch.as_tensor(get_coordinate(image), dtype=torch.float32).permute(2, 0, 1)
+        P = img_gt['P']
+        P = P[:, :, 1:4]# AoP & DoP
+        P1 = torch.as_tensor(P, dtype=torch.float32).permute(2, 0, 1)
+        IrawD = torch.as_tensor(img_gt['IrawD'], dtype=torch.float32).unsqueeze(0)
+        IrawS = torch.as_tensor(img_gt['IrawS'], dtype=torch.float32).unsqueeze(0)
+        input = torch.cat([image, P1, IrawD, IrawS, viewing_encoding], dim=0)
 
         # UD_SfP Input_2
         # viewing_encoding = torch.as_tensor(get_coordinate(image), dtype=torch.float32).permute(2, 0, 1)
@@ -66,10 +66,10 @@ class MyDataset(Dataset):
         # input = torch.cat([image, N], dim=0)
 
         # AttentionU2Net
-        P = img_gt['P'] # Physical Prior, Channel 1 = average brightness image, Channel 2&3 = AoP, Channel 4 = DoP, Channel 5 = unpolarized light
-        P = P[:, :, 1:5]
-        P1 = torch.as_tensor(P, dtype=torch.float32).permute(2, 0, 1)
-        input = torch.cat([image, P1], dim=0)
+        # P = img_gt['P'] # Physical Prior, Channel 1 = average brightness image, Channel 2&3 = AoP, Channel 4 = DoP, Channel 5 = unpolarized light
+        # P = P[:, :, 1:5]
+        # P1 = torch.as_tensor(P, dtype=torch.float32).permute(2, 0, 1)
+        # input = torch.cat([image, P1], dim=0)
 
         # SfPW
         # viewing_encoding = torch.as_tensor(get_coordinate(image), dtype=torch.float32).permute(2, 0, 1)
