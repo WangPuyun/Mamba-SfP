@@ -1,0 +1,9 @@
+Table-1 style quantitative metrics (global pixel aggregation within mask):
+Images evaluated: 72
+Valid pixels: 9593790
+Mean angular error (deg): 14.0704
+Median angular error (deg): 10.4160
+RMSE (deg): 18.4127
+Accuracy < 11.25 deg (%): 53.1000
+Accuracy < 22.5 deg (%): 80.6979
+Accuracy < 30.0 deg (%): 90.3955

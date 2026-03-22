@@ -8,7 +8,7 @@ import torch
 import torch.distributed as dist
 import torch.multiprocessing as mp
 from torchvision.utils import save_image
-
+from thop import profile
 import config as config
 from UD_SfPNet import NetWork
 from utils_window import PATCH, STRIDE, hann2d
@@ -18,7 +18,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description='PyTorch Network Testing')
     parser.add_argument('--model_name', type=str, default=None, help="Path to the pre-trained model file to load, e.g., 'xxx.pth'")
     parser.add_argument('--test_batch_size', type=int, default=4, help='Global test batch size (per-process batch size * nprocs)')
-    parser.add_argument('--ckpt_path', type=str, default='./pt/UD_SfPNet/1000.pth', help="Path to model weights, e.g., './pt/1000.pth'")
+    parser.add_argument('--ckpt_path', type=str, default='./pt/Mamba/700.pth', help="Path to model weights, e.g., './pt/1000.pth'")
     parser.add_argument('--results_dir', type=str, default='./results_sfp', help='Directory to save predicted normal maps')
     parser.add_argument('--error_maps_dir', type=str, default='./error_maps', help='Directory to save angular error heatmaps')
     parser.add_argument('--summary_path', type=str, default='./table1_metrics.txt', help='Path to save final Table-1-style metrics')
@@ -96,6 +96,17 @@ def main_worker(local_rank, nprocs, args):
     checkpoint = torch.load(args.ckpt_path, map_location=f'cuda:{local_rank}')
     model.load_state_dict(checkpoint['model'])
 
+    # Parameter counts
+    total_params = sum(p.numel() for p in model.parameters())
+    print(f"Parameter counts: {total_params / 1e6:.2f}M")
+
+    # FLOPs
+    dummy = torch.randn(1, 12, 256, 256).cuda(args.local_rank)
+    flops, params = profile(model, inputs=(dummy,), verbose=False)
+    print(f"FLOPs: {flops / 1e9:.2f}G")
+    print(f"Params: {params / 1e6:.2f}M")
+    del dummy
+
     os.makedirs(args.results_dir, exist_ok=True)
     os.makedirs(args.error_maps_dir, exist_ok=True)
 
@@ -113,8 +124,15 @@ def main_worker(local_rank, nprocs, args):
     num_hist_bins = int(round(180.0 / args.median_bin_deg)) + 1
     median_hist = torch.zeros(num_hist_bins, dtype=torch.long, device=device)
 
+    # Runtime benchmarks
+    starter = torch.cuda.Event(enable_timing=True)
+    ender = torch.cuda.Event(enable_timing=True)
+
+    times = []
+
     with torch.no_grad():
         for sample in test_loader:
+            starter.record()
             inputs = sample['input'].cuda(device)
             image   = sample['image'].cuda(device)
             gt = sample['ground_truth'].float().cuda(device) / 255.0
@@ -215,6 +233,9 @@ def main_worker(local_rank, nprocs, args):
                 fig.tight_layout()
                 fig.savefig(f'{args.error_maps_dir}/{b_filename}.png', dpi=300, bbox_inches='tight')
                 plt.close(fig)
+            ender.record()
+            torch.cuda.synchronize()
+            times.append(starter.elapsed_time(ender))
 
     # ----------- DDP reduction -----------
     if dist.is_initialized():
@@ -256,6 +277,7 @@ def main_worker(local_rank, nprocs, args):
     if dist.is_initialized():
         dist.barrier()
         dist.destroy_process_group()
+    print(f"Avg runtime: {sum(times)/len(times)/1000:.3f}s per image (bs=1)")
 
 
 if __name__ == '__main__':
