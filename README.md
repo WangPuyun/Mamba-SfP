@@ -21,26 +21,26 @@
 
 ---
 
-## Overview
+## 🌊 Overview
 
 `Mamba-SfP` is a research codebase for underwater 3D surface normal reconstruction from polarization cues.
 
 This README is a polished template for release. Sections marked `TBD` are intentionally left blank so you can fill them later.
 
-## Architecture
+## 🧠 Architecture
 
 <p align="center">
   <img src="./README_img/Network.png" alt="Mamba-SfP Network Architecture" width="95%" />
 </p>
 
-## Highlights
+## ✨ Highlights
 
 - End-to-end training pipeline for underwater SfP normal estimation.
 - Distributed multi-GPU training with `DistributedDataParallel`.
 - Sliding-window inference and per-pixel angular-error visualization.
 - Built-in summary export for Table-1-style benchmark metrics.
 
-## Project Structure
+## 🗂️ Project Structure
 
 ```text
 Mamba-SfP/
@@ -60,7 +60,7 @@ Mamba-SfP/
 `-- environment.yml
 ```
 
-## Environment Setup
+## ⚙️ Environment Setup
 
 ### Option 1: Conda (recommended)
 
@@ -77,7 +77,7 @@ conda env create -f environment.yml
 conda activate tongyong
 ```
 
-## Data Preparation
+## 🧩 Data Preparation
 
 Put dataset files in:
 
@@ -93,7 +93,7 @@ Required CSV index files:
 
 Dataset download link: `TBD`
 
-## Training
+## 🚀 Training
 
 Run distributed training:
 
@@ -109,7 +109,7 @@ python train.py --model_name /700.pth --checkpoints_dir ./pt/Mamba/
 
 TensorBoard logs are written to `./runs` by default.
 
-## Evaluation and Visualization
+## 🔍 Evaluation and Visualization
 
 Generate predicted normal maps and angular error maps:
 
@@ -123,7 +123,7 @@ Outputs:
 - Error heatmaps: `./error_maps`
 - Quantitative summary: `./table1_metrics.txt`
 
-## Quantitative Result (Current Local Summary)
+## 📊 Quantitative Result (Current Local Summary)
 
 | Metric | Value |
 |---|---:|
@@ -136,11 +136,11 @@ Outputs:
 | Accuracy < 22.5 deg (%) | 80.6979 |
 | Accuracy < 30.0 deg (%) | 90.3955 |
 
-## Checkpoints
+## 📦 Checkpoints
 
 Pretrained model link: `TBD`
 
-## Citation
+## 📚 Citation
 
 Paper link: `TBD`
 
@@ -153,7 +153,7 @@ Paper link: `TBD`
 }
 ```
 
-## Acknowledgements
+## 🙏 Acknowledgements
 
 This project builds on ideas and/or implementations from:
 
@@ -161,7 +161,7 @@ This project builds on ideas and/or implementations from:
 - [Deep Color Consistent Network for Low Light-Image Enhancement](https://github.com/Ian0926/DCC-Net)
 - [Shape from Polarization for Complex Scenes in the Wild](https://github.com/ChenyangLEI/sfp-wild)
 
-## To Fill Later
+## 📝 To Fill Later
 
 - [ ] Official paper title and link.
 - [ ] Pretrained checkpoints and download instructions.
