@@ -1,22 +1,30 @@
 import numpy as np
 import imageio
 import open3d as o3d
-
+import pymeshlab
+import os
 
 def ensure_mesh_from_ply(ply_path: str) -> o3d.geometry.TriangleMesh:
     """
-    Reads a PLY file: returns the mesh directly if available. 
-    If it's a point cloud, estimates normals, performs Poisson surface reconstruction, and clips the result to the point cloud's bounding box.
+    Read a PLY file.
+    - First triangulate polygonal faces if needed.
+    - If it already contains a triangle mesh, return it.
+    - If it is a point cloud, estimate normals and reconstruct a mesh with Poisson.
     """
+    ply_path = triangulate_ply_if_needed(ply_path)
+
     mesh = o3d.io.read_triangle_mesh(ply_path)
-    if mesh.is_empty():  # The input might be a point cloud
+    if mesh.is_empty():
         pcd = o3d.io.read_point_cloud(ply_path)
         if pcd.is_empty():
             raise ValueError(f"Failed to read mesh or point cloud from file: {ply_path}")
-        pcd.estimate_normals(search_param=o3d.geometry.KDTreeSearchParamHybrid(
-            radius=0.02, max_nn=30))
-        mesh, _ = o3d.geometry.TriangleMesh.create_from_point_cloud_poisson(
-            pcd, depth=9)
+
+        if not pcd.has_normals():
+            pcd.estimate_normals(
+                search_param=o3d.geometry.KDTreeSearchParamHybrid(radius=0.02, max_nn=30)
+            )
+
+        mesh, _ = o3d.geometry.TriangleMesh.create_from_point_cloud_poisson(pcd, depth=9)
         bbox = pcd.get_axis_aligned_bounding_box()
         mesh = mesh.crop(bbox)
 
@@ -117,17 +125,39 @@ def render_turntable_win(
     vis.destroy_window()
     print(f"Saved to {out_path}")
 
+def triangulate_ply_if_needed(ply_path: str) -> str:
+    """
+    Convert a polygonal PLY into a pure triangle-mesh PLY.
+    If triangulation fails, return the original path.
+    """
+    try:
+        ms = pymeshlab.MeshSet()
+        ms.load_new_mesh(ply_path)
+
+        # MeshLab / PyMeshLab filter:
+        # "Turn into a Pure-Triangular mesh"
+        ms.apply_filter("meshing_poly_to_tri")
+
+        base, ext = os.path.splitext(ply_path)
+        tri_path = base + "_triangulated" + ext
+        ms.save_current_mesh(tri_path)
+
+        print(f"Triangulated mesh saved to: {tri_path}")
+        return tri_path
+    except Exception as e:
+        print(f"[WARN] Triangulation failed, fallback to original file: {e}")
+        return ply_path
 
 if __name__ == "__main__":
     # === Replace with your PLY file path ===
-    ply_path = r"D:\postgraduate\bilateral_normal_integration\data\Dragon2_U2Net\mesh_k_2.ply"
+    ply_path = r"E:\postgraduate\bilateral_normal_integration\data\Mamba-SfP\mesh_k_2.ply"
     mesh = ensure_mesh_from_ply(ply_path)
 
     render_turntable_win(
         mesh,
         out_path="rotate_result.mp4",
-        width=1080,
-        height=1080,
+        width=1224,
+        height=1024,
         seconds=6,
         fps=30,
         axis="y",  # Allowed values: 'x' or 'z'

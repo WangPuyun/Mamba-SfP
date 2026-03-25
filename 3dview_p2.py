@@ -259,7 +259,7 @@ if __name__ == "__main__":
         start_at_center=True,
         pre_rot_deg=(90, -90, 180),
         mesh_show_back_face=True,
-        brightness=0.86,       
+        brightness=1.0,       
         use_lighting=True,
         mirror_horizontal=True,
     )
