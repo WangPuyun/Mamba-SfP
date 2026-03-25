@@ -2,14 +2,18 @@ import time
 import numpy as np
 import imageio
 import open3d as o3d
-
+import pymeshlab
+import os
 
 def ensure_mesh_from_ply(ply_path: str) -> o3d.geometry.TriangleMesh:
     """
     Read a PLY file.
+    - First triangulate polygonal faces if needed.
     - If it already contains a triangle mesh, return it.
     - If it is a point cloud, estimate normals and reconstruct a mesh with Poisson.
     """
+    ply_path = triangulate_ply_if_needed(ply_path)
+
     mesh = o3d.io.read_triangle_mesh(ply_path)
     if mesh.is_empty():
         pcd = o3d.io.read_point_cloud(ply_path)
@@ -100,6 +104,7 @@ def render_orbit_video_win(
     mesh_show_back_face=True,
     brightness=0.86,
     use_lighting=True,
+    mirror_horizontal=True,
 ):
     """
     Render a Windows-friendly orbit video using the classic Open3D Visualizer.
@@ -114,6 +119,7 @@ def render_orbit_video_win(
     - brightness < 1.0 will darken captured frames to reduce overexposure
     - cycles controls how many back-and-forth swings happen in the whole video
     - seconds controls total video duration
+    - mirror_horizontal=True will flip each frame left-right before saving
     """
     total_frames = max(1, int(seconds * fps))
     elev = np.deg2rad(elev_deg)
@@ -195,6 +201,11 @@ def render_orbit_video_win(
             img = np.asarray(vis.capture_screen_float_buffer(do_render=True), dtype=np.float32)
             img = np.clip(img * float(brightness), 0.0, 1.0)
             frame = (img * 255.0).astype(np.uint8)
+
+            # Mirror the final video horizontally so left/right directions are reversed.
+            if mirror_horizontal:
+                frame = np.ascontiguousarray(frame[:, ::-1, :])
+
             writer.append_data(frame)
     finally:
         writer.close()
@@ -202,18 +213,40 @@ def render_orbit_video_win(
 
     print(f"Saved to {out_path}")
 
+def triangulate_ply_if_needed(ply_path: str) -> str:
+    """
+    Convert a polygonal PLY into a pure triangle-mesh PLY.
+    If triangulation fails, return the original path.
+    """
+    try:
+        ms = pymeshlab.MeshSet()
+        ms.load_new_mesh(ply_path)
+
+        # MeshLab / PyMeshLab filter:
+        # "Turn into a Pure-Triangular mesh"
+        ms.apply_filter("meshing_poly_to_tri")
+
+        base, ext = os.path.splitext(ply_path)
+        tri_path = base + "_triangulated" + ext
+        ms.save_current_mesh(tri_path)
+
+        print(f"Triangulated mesh saved to: {tri_path}")
+        return tri_path
+    except Exception as e:
+        print(f"[WARN] Triangulation failed, fallback to original file: {e}")
+        return ply_path
 
 if __name__ == "__main__":
     # Replace this with your own PLY file path.
-    ply_path = r"E:\postgraduate\bilateral_normal_integration\data\Dragon2_U2Net\mesh_k_2.ply"
+    ply_path = r"E:\postgraduate\bilateral_normal_integration\data\Mamba-SfP\mesh_k_2.ply"
 
     mesh = ensure_mesh_from_ply(ply_path)
 
     render_orbit_video_win(
         mesh,
-        out_path="orbit_result.mp4",
-        width=1080,
-        height=1080,
+        out_path="orbit_result.mp4",  # mirrored output video
+        width=1224,
+        height=1024,
         seconds=10,            
         fps=30,
         bg_color=(255, 255, 255),
@@ -222,10 +255,11 @@ if __name__ == "__main__":
         total_yaw_deg=60.0,
         elev_deg=0.0,
         cycles=2.0,            
-        yaw_offset_deg=-90.0,
+        yaw_offset_deg=-110.0,
         start_at_center=True,
         pre_rot_deg=(90, -90, 180),
         mesh_show_back_face=True,
         brightness=0.86,       
         use_lighting=True,
+        mirror_horizontal=True,
     )
