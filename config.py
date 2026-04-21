@@ -81,15 +81,15 @@ def create_dataloaders(args):
     """
     # Training set
     train_set = MyDataset(
-        csv_file='Underwater Dataset/train_list_withoutcleanwater.csv',
-        root_dir='Underwater Dataset/Baseline_Data',
+        csv_file='Dataset/train_list.csv',
+        root_dir='Dataset/Baseline_Data',
         transform=RandomCrop()  # RandomCrop for data augmentation
     )
 
     # Validation set
     val_set = MyDataset(
-        csv_file='Underwater Dataset/val_list_withoutcleanwater.csv',
-        root_dir='Underwater Dataset/Baseline_Data',
+        csv_file='Dataset/val_list.csv',
+        root_dir='Dataset/Baseline_Data',
         transform=False  
     )
 
@@ -130,8 +130,8 @@ def test_dataloaders(args):
 
     # Test set
     test_set = MyDataset(
-        csv_file='Underwater Dataset/test_list_withoutcleanwater.csv',
-        root_dir='Underwater Dataset/Baseline_Data',
+        csv_file='Dataset/test_list.csv',
+        root_dir='Dataset/Baseline_Data',
         transform=False
     )
 

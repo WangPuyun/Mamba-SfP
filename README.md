@@ -4,13 +4,11 @@
 
 **A Mamba-based framework for underwater Shape-from-Polarization (SfP) normal reconstruction**
 
-[![GitHub](https://img.shields.io/badge/GitHub-Repository-181717?logo=github&logoColor=white)](https://github.com/TBD)
+[![GitHub](https://img.shields.io/badge/GitHub-Repository-181717?logo=github&logoColor=white)](https://github.com/WangPuyun/Mamba-SfP.git)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.3.0-EE4C2C?logo=pytorch&logoColor=white)](https://pytorch.org/)
 [![CUDA](https://img.shields.io/badge/CUDA-12.1-76B900?logo=nvidia&logoColor=white)](https://developer.nvidia.com/cuda-toolkit)
 [![arXiv](https://img.shields.io/badge/arXiv-TBD-B31B1B?logo=arxiv&logoColor=white)](https://arxiv.org/abs/TBD)
-[![Baidu Netdisk](https://img.shields.io/badge/Baidu_Netdisk-TBD-2932E1?logo=baidu&logoColor=white)](https://pan.baidu.com/s/TBD?pwd=TBD)
-[![IEEE](https://img.shields.io/badge/IEEE-TBD-00629B?logo=ieee&logoColor=white)](https://ieeexplore.ieee.org/document/TBD)
 [![Elsevier](https://img.shields.io/badge/Elsevier-TBD-FF6C00?logo=elsevier&logoColor=white)](https://www.sciencedirect.com/science/article/pii/TBD)
 
 </div>
@@ -23,9 +21,8 @@
 
 ## 🌊 Overview
 
-`Mamba-SfP` is a research codebase for underwater 3D surface normal reconstruction from polarization cues.
+`Mamba-SfP` is a research codebase for 3D shape from polarization (SfP) normal estimation via selective state space models.
 
-This README is a polished template for release. Sections marked `TBD` are intentionally left blank so you can fill them later.
 
 ## 🧠 Architecture
 
@@ -35,30 +32,9 @@ This README is a polished template for release. Sections marked `TBD` are intent
 
 ## ✨ Highlights
 
-- End-to-end training pipeline for underwater SfP normal estimation.
-- Distributed multi-GPU training with `DistributedDataParallel`.
-- Sliding-window inference and per-pixel angular-error visualization.
-- Built-in summary export for Table-1-style benchmark metrics.
+- Explored the application of Mamba in the field of shape from polarization.
+- Achieves high computational efficiency with only 33.24M parameters and 13.96 GFLOPs.
 
-## 🗂️ Project Structure
-
-```text
-Mamba-SfP/
-|-- README_img/
-|   |-- Network.png
-|   `-- 3D.gif
-|-- Underwater Dataset/
-|   |-- Baseline_Data/
-|   |-- train_list_withoutcleanwater.csv
-|   |-- val_list_withoutcleanwater.csv
-|   `-- test_list_withoutcleanwater.csv
-|-- train.py
-|-- Angle_error_map.py
-|-- config.py
-|-- Datasets.py
-|-- requirements.txt
-`-- environment.yml
-```
 
 ## ⚙️ Environment Setup
 
@@ -87,11 +63,9 @@ Put dataset files in:
 
 Required CSV index files:
 
-- `Underwater Dataset/train_list_withoutcleanwater.csv`
-- `Underwater Dataset/val_list_withoutcleanwater.csv`
-- `Underwater Dataset/test_list_withoutcleanwater.csv`
-
-Dataset download link: `TBD`
+- `Dataset/train_list.csv`
+- `Dataset/val_list.csv`
+- `Dataset/test_list.csv`
 
 ## 🚀 Training
 
@@ -123,22 +97,18 @@ Outputs:
 - Error heatmaps: `./error_maps`
 - Quantitative summary: `./table1_metrics.txt`
 
-## 📊 Quantitative Result (Current Local Summary)
+Generate Grad-CAM visualizations:
 
-| Metric | Value |
-|---|---:|
-| Images evaluated | 72 |
-| Valid pixels | 9,593,790 |
-| Mean angular error (deg) | 14.0704 |
-| Median angular error (deg) | 10.4160 |
-| RMSE (deg) | 18.4127 |
-| Accuracy < 11.25 deg (%) | 53.1000 |
-| Accuracy < 22.5 deg (%) | 80.6979 |
-| Accuracy < 30.0 deg (%) | 90.3955 |
+```bash
+python CAM_map.py
+```
 
-## 📦 Checkpoints
+Outputs:
 
-Pretrained model link: `TBD`
+- Predicted normal maps: `./results_sfp`
+- Grad-CAM maps: `./error_maps/*_gradcam.png`
+- Grad-CAM overlay images: `./error_maps/*_gradcam_overlay.png`
+
 
 ## 📚 Citation
 
@@ -152,19 +122,3 @@ Paper link: `TBD`
   year    = {2026}
 }
 ```
-
-## 🙏 Acknowledgements
-
-This project builds on ideas and/or implementations from:
-
-- [DEA-Net: Single image dehazing based on detail-enhanced convolution and content-guided attention](https://github.com/cecret3350/DEA-Net)
-- [Deep Color Consistent Network for Low Light-Image Enhancement](https://github.com/Ian0926/DCC-Net)
-- [Shape from Polarization for Complex Scenes in the Wild](https://github.com/ChenyangLEI/sfp-wild)
-
-## 📝 To Fill Later
-
-- [ ] Official paper title and link.
-- [ ] Pretrained checkpoints and download instructions.
-- [ ] Dataset release/download page.
-- [ ] Full benchmark table and comparison methods.
-- [ ] License section.
