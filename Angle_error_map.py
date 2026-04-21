@@ -10,7 +10,7 @@ import torch.multiprocessing as mp
 from torchvision.utils import save_image
 from thop import profile
 import config as config
-from UD_SfPNet import NetWork
+from UD_SfPNet_p2 import NetWork
 from utils_window import PATCH, STRIDE, hann2d
 
 
