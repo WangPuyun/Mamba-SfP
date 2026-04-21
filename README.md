@@ -114,7 +114,7 @@ Outputs:
 - Grad-CAM overlay images: `./error_maps/*_gradcam_overlay.png`
 
 <p align="center">
-  <img src="./README_img/Grad_CAM.png" alt="Grad_CAM" width="95%" />
+  <img src="./README_img/Grad_CAM.png" alt="Grad_CAM" width="45%" />
 </p>
 
 ## 📚 Citation
