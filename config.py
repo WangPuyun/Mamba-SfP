@@ -9,7 +9,7 @@ import torch.nn.functional as F
 import matplotlib.pyplot as plt
 from Datasets import MyDataset, RandomCrop, FixedCrop, RandomMove, unfold_image, concat_image, unfold_enhanced_image, RandomMovePad, concat_enhanced_image
 from torch.utils.data import DataLoader
-from UD_SfPNet_p2 import NetWork
+from Mamba_SfP import NetWork
 from math import pi
 import math
 import numpy as np
