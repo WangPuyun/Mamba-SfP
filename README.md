@@ -97,6 +97,10 @@ Outputs:
 - Error heatmaps: `./error_maps`
 - Quantitative summary: `./table1_metrics.txt`
 
+<p align="center">
+  <img src="./README_img/heatmap.png" alt="Error Heatmap" width="95%" />
+</p>
+
 Generate Grad-CAM visualizations:
 
 ```bash
@@ -109,6 +113,9 @@ Outputs:
 - Grad-CAM maps: `./error_maps/*_gradcam.png`
 - Grad-CAM overlay images: `./error_maps/*_gradcam_overlay.png`
 
+<p align="center">
+  <img src="./README_img/Grad_CAM.png" alt="Grad_CAM" width="95%" />
+</p>
 
 ## 📚 Citation
 
