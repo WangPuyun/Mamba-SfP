@@ -12,7 +12,7 @@ import torch.multiprocessing as mp
 from torchvision.utils import save_image
 from thop import profile
 import config as config
-from UD_SfPNet_p3 import NetWork
+from Mamba_SfP import NetWork
 from utils_window import PATCH, STRIDE, hann2d
 from pytorch_grad_cam import GradCAM
 from pytorch_grad_cam.utils.image import show_cam_on_image
@@ -22,7 +22,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description='PyTorch Network Testing')
     parser.add_argument('--model_name', type=str, default=None, help="Path to the pre-trained model file to load, e.g., 'xxx.pth'")
     parser.add_argument('--test_batch_size', type=int, default=4, help='Global test batch size (per-process batch size * nprocs)')
-    parser.add_argument('--ckpt_path', type=str, default='./pt/Mamba/900.pth', help="Path to model weights, e.g., './pt/1000.pth'")
+    parser.add_argument('--ckpt_path', type=str, default='./pt/Mamba/700.pth', help="Path to model weights, e.g., './pt/1000.pth'")
     parser.add_argument('--results_dir', type=str, default='./results_sfp', help='Directory to save predicted normal maps')
     parser.add_argument('--error_maps_dir', type=str, default='./error_maps', help='Directory to save angular error heatmaps')
     parser.add_argument('--summary_path', type=str, default='./table1_metrics.txt', help='Path to save final Table-1-style metrics')
