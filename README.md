@@ -58,7 +58,7 @@ conda activate tongyong
 Put dataset files in:
 
 ```text
-./Underwater Dataset/Baseline_Data/
+./Dataset/Baseline_Data/
 ```
 
 Required CSV index files:
