@@ -2,7 +2,7 @@
 
 # Mamba-SfP
 
-**A Mamba-based framework for underwater Shape-from-Polarization (SfP) normal reconstruction**
+**A Mamba-based framework for open-scene Shape-from-Polarization (SfP) normal reconstruction**
 
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-181717?logo=github&logoColor=white)](https://github.com/WangPuyun/Mamba-SfP.git)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
