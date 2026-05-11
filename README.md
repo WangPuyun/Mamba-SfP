@@ -8,8 +8,7 @@
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.3.0-EE4C2C?logo=pytorch&logoColor=white)](https://pytorch.org/)
 [![CUDA](https://img.shields.io/badge/CUDA-12.1-76B900?logo=nvidia&logoColor=white)](https://developer.nvidia.com/cuda-toolkit)
-[![arXiv](https://img.shields.io/badge/arXiv-TBD-B31B1B?logo=arxiv&logoColor=white)](https://arxiv.org/abs/TBD)
-[![Elsevier](https://img.shields.io/badge/Elsevier-TBD-FF6C00?logo=elsevier&logoColor=white)](https://www.sciencedirect.com/science/article/pii/TBD)
+[![Elsevier](https://img.shields.io/badge/Elsevier-SSRN%20Preprint-FF6C00?logo=elsevier&logoColor=white)](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6736076)
 
 </div>
 
@@ -119,13 +118,11 @@ Outputs:
 
 ## 📚 Citation
 
-Paper link: `TBD`
 
 ```bibtex
-@article{mamba_sfp_2026,
-  title   = {TBD},
-  author  = {TBD},
-  journal = {TBD},
-  year    = {2026}
+@article{wang6736076mamba,
+  title={Mamba-SfP: Towards Open-Scene 3D Shape from Polarization via Selective State Space Models},
+  author={Wang, Puyun and Yu, Kaimin and He, Huayang and Huang, Feng and Wu, Xianyu and Chen, Yating},
+  journal={Available at SSRN 6736076}
 }
 ```
