@@ -18,3 +18,5 @@ pt/
 *.bmp
 *.vsdx
 
+summarize_illumination_results.py
+feature_vis.py
